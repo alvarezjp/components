@@ -1,14 +1,18 @@
 import React from "react";
+import { useState } from "react";
 import {
   Avatar,
   ContainAll,
   ContainAvatar,
   ContainBody,
+  ContainSubMenu,
   ContainIcons,
   ContainText,
   TitleJob,
   TitleName,
 } from "./Styled";
+
+import IconsHook from "./IconsHook";
 import ArrowIconHook from "./ArrowIconHook";
 
 const MobileNavigation = () => {
@@ -19,7 +23,23 @@ const MobileNavigation = () => {
     { nameSection: "Location", nameIcon: "place" },
     { nameSection: "Community", nameIcon: "groups" },
   ];
+  const ConfigurationCategory = [
+    { nameSection: "FAQS", nameIcon: "people" },
+    { nameSection: "Settings", nameIcon: "settings" },
+  ];
+  const bottomMenu = [
+    { nameSection: "home", nameIcon: "homeOutlined" },
+    { nameSection: "statistics", nameIcon: "trending_up" },
+    { nameSection: "mail", nameIcon: "mail" },
+    { nameSection: "profile", nameIcon: "person" },
+  ];
 
+  const [footerMenu, setFooterMenu] = useState("profile");
+
+  const actionClick = (event) => {
+    console.log(event.target.id);
+    setFooterMenu(event.target.id);
+  };
   return (
     <ContainAll>
       <ContainAvatar>
@@ -30,11 +50,47 @@ const MobileNavigation = () => {
         </ContainText>
       </ContainAvatar>
       <ContainBody>
-        {category.map((line, index) => {
-          return <ArrowIconHook item={line.nameSection} icon={line.nameIcon} key={index} />;
-        })}
+        {footerMenu === "profile" &&
+          <>
+            <ContainSubMenu>
+              {category.map((line, index) => {
+                return (
+                  <ArrowIconHook
+                    item={line.nameSection}
+                    icon={line.nameIcon}
+                    key={index}
+                  />
+                );
+              })}
+            </ContainSubMenu>
+            <ContainSubMenu>
+              {ConfigurationCategory.map((line, index) => {
+                return (
+                  <ArrowIconHook
+                    item={line.nameSection}
+                    icon={line.nameIcon}
+                    key={index}
+                  />
+                );
+              })}
+            </ContainSubMenu>
+          </>
+        }
       </ContainBody>
-      <ContainIcons />
+      <ContainIcons>
+        {bottomMenu.map((item) => {
+          return (
+            <IconsHook
+              style={{ border: "1px solid red" }}
+              icon={item.nameIcon}
+              key={item.nameSection}
+              nameSection={item.nameSection}
+              state={footerMenu}
+              onClick={actionClick}
+            />
+          );
+        })}
+      </ContainIcons>
     </ContainAll>
   );
 };
