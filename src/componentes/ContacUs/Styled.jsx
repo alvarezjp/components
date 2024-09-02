@@ -54,23 +54,25 @@ const Container = styled.section`
 `;
 
 const ContainForm = styled.article`
-  border: 1px solid red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 70%;
-  height: 90%;
+  height: 95%;
   background-color: #f9f4f4fa;
+  box-sizing: border-box;
+  /* border: 1px solid red; */
 `;
 
 const Form = styled.form`
-  height: 100%;
+  height: 90%;
+  width: 90%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 50px;
+  justify-content: space-between;
   box-sizing: border-box;
-  border: 3px solid blue;
-  .inputText {
-    border: 1px solid red;
-  }
+  /* border: 3px solid blue; */
+  
 `;
 
 const Title = styled.h2`
@@ -90,17 +92,4 @@ const SubText = styled.p`
   font-weight: 500;
 `;
 
-const InputChecks = styled.input`
-  border: 60px solid purple;
-  border-radius: 500px;
-`;
-
-export {
-  Container,
-  ContainForm,
-  Form,
-  Title,
-  ContainChecks,
-  SubText,
-  InputChecks,
-};
+export { Container, ContainForm, Form, Title, ContainChecks, SubText };
