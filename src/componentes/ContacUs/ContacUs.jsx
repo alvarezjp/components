@@ -11,6 +11,8 @@ import {
 import TextField from "@mui/material/TextField";
 import Radio from "@mui/joy/Radio";
 import Button from "@mui/joy/Button";
+import Alert from "@mui/material/Alert";
+import AlertTitle from "@mui/material/AlertTitle";
 
 const ContacUs = () => {
   const [count, setCount] = useState(0);
@@ -29,7 +31,8 @@ const ContacUs = () => {
     multiline: false,
   };
 
-  const [submitForm, setSubmitForm] = useState(false);
+  const [allFilled, setAllFilled] = useState(false);
+  const [closeFilled, setCloseFilled] = useState(true);
   const [countFalse, setCountFalse] = useState(0);
   const [errors, setErrors] = useState(previeErrors);
   const [optionCheck, setOptionCheck] = useState("email");
@@ -43,15 +46,16 @@ const ContacUs = () => {
   const clickSubmit = (event) => {
     event.preventDefault();
     console.log("El formulario se envio ");
-    const allFilled = Object.values(inputForm).every((value) => value.trim() !== "");
-    
+    setAllFilled(
+      Object.values(inputForm).every((value) => value.trim() !== "")
+    );
+
     if (allFilled) {
       alert("El formulario se ha enviado correctamente.");
     } else {
       alert("Por favor, rellena todos los campos.");
     }
 
-    
     Object.entries(inputForm).forEach(([key, value]) => {
       if (!value) {
         setErrors((prevErrors) => ({
@@ -81,10 +85,19 @@ const ContacUs = () => {
     setCountFalse(countFalse);
   }, [errors]);
 
-
-
   return (
     <Container>
+      {(allFilled ) ? (
+        <Alert severity="success" style={{ position: "absolute", top: "50%" }}>
+          <AlertTitle>Success</AlertTitle>
+          This is a success Alert with an encouraging title.
+        </Alert>
+      ) : (
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          This is an error Alert with a scary title.
+        </Alert>
+      )}
       <ContainForm>
         <Form onSubmit={clickSubmit}>
           <Title>Send us a Message</Title>
