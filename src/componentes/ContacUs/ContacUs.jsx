@@ -11,105 +11,93 @@ import {
 import TextField from "@mui/material/TextField";
 import Radio from "@mui/joy/Radio";
 import Button from "@mui/joy/Button";
-import Alert from "@mui/material/Alert";
-import AlertTitle from "@mui/material/AlertTitle";
+import {
+  clickSubmit,
+  previeErrors,
+  previeValue,
+  handleClick,
+  inputChange,
+} from "./eventHandlers.js";
+import useCountFalse from "./useCountFalse.js";
+import Alert from "@mui/joy/Alert";
+import IconButton from "@mui/joy/IconButton";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ReportIcon from '@mui/icons-material/Report';
 
 const ContacUs = () => {
-  const [count, setCount] = useState(0);
 
-  const previeValue = {
-    name: "",
-    email: "",
-    phone: "",
-    multiline: "",
-  };
-
-  let previeErrors = {
-    name: false,
-    email: false,
-    phone: false,
-    multiline: false,
-  };
-
-  const [allFilled, setAllFilled] = useState(false);
-  const [closeFilled, setCloseFilled] = useState(true);
+  const [formAlert, setFormAlert] = useState("");
   const [countFalse, setCountFalse] = useState(0);
   const [errors, setErrors] = useState(previeErrors);
   const [optionCheck, setOptionCheck] = useState("email");
   const [inputForm, setInputForm] = useState(previeValue);
   const { inputName, inputEmail, inputPhone, inputMultiline } = inputForm;
 
-  const handleClick = (event) => {
-    setOptionCheck(event.target.value);
-  };
-
-  const clickSubmit = (event) => {
-    event.preventDefault();
-    console.log("El formulario se envio ");
-    setAllFilled(
-      Object.values(inputForm).every((value) => value.trim() !== "")
-    );
-
-    if (allFilled) {
-      alert("El formulario se ha enviado correctamente.");
-    } else {
-      alert("Por favor, rellena todos los campos.");
-    }
-
-    Object.entries(inputForm).forEach(([key, value]) => {
-      if (!value) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [key]: true,
-        }));
-      }
-      if (value !== "") {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          [key]: false,
-        }));
-      }
-    });
-  };
-
-  const inputChange = (event) => {
-    const nombre = event.target.name;
-    const valor = event.target.value;
-    setInputForm({ ...inputForm, [nombre]: valor });
-  };
-
-  useEffect(() => {
-    const countFalse = Object.values(errors).filter(
-      (error) => error === true
-    ).length;
-    setCountFalse(countFalse);
-  }, [errors]);
+  useCountFalse(errors, setCountFalse);
 
   return (
     <Container>
-      {/* {(allFilled ) ? (
-        <Alert severity="success" style={{ position: "absolute", top: "50%" }}>
-          <AlertTitle>Success</AlertTitle>
-          This is a success Alert with an encouraging title.
-        </Alert>
-      ) : (
-        <Alert severity="error">
-          <AlertTitle>Error</AlertTitle>
-          This is an error Alert with a scary title.
-        </Alert>
-      )} */}
       <ContainForm>
-        <Form onSubmit={clickSubmit}>
+        {formAlert === "bien" && (
+          <Alert
+            // style={{ position: "absolute", top: "10px" }}
+            key={"Success"}
+            sx={{
+              alignItems: "flex-start",
+              width: "80%",
+              border: "2px solid black",
+              position: "absolute",
+              top: "10px",
+            }}
+            startDecorator={<CheckCircleIcon />}
+            variant="soft"
+            color={"success"}
+            endDecorator={
+              <IconButton variant="soft" color={"success"}>
+                <CloseRoundedIcon />
+              </IconButton>
+            }>
+            <div>
+              <div>Listo</div>
+              <p>Esto esta listo</p>
+            </div>
+          </Alert>
+        )}
+        {formAlert === "mal" && (
+          <Alert
+            key={"Error"}
+            sx={{
+              alignItems: "flex-start",
+              width: "80%",
+              border: "2px solid black",
+              position: "absolute",
+              top: "10px",
+            }}
+            startDecorator={<ReportIcon /> }
+            variant="soft"
+            color={"danger"}
+            endDecorator={
+              <IconButton variant="soft" color={"danger"}>
+                <CloseRoundedIcon />
+              </IconButton>
+            }>
+            <div>
+              <div>Mal</div>
+              <p>Faltan datos</p>
+            </div>
+          </Alert>
+        )}
+        <Form onSubmit={(event) => clickSubmit(event, inputForm, setErrors,setFormAlert)}>
           <Title>Send us a Message</Title>
           <TextField
             id="outlined-basic"
-            // id="outlined-error"
             error={errors.name}
             label="Name"
             name="name"
             variant="outlined"
             value={inputName}
-            onChange={inputChange}
+            onChange={(event) => inputChange(event, setInputForm, inputForm)}
           />
           <TextField
             error={errors.email}
@@ -119,7 +107,7 @@ const ContacUs = () => {
             name="email"
             type="email"
             value={inputEmail}
-            onChange={inputChange}
+            onChange={(event) => inputChange(event, setInputForm, inputForm)}
           />
           <TextField
             error={errors.phone}
@@ -128,7 +116,7 @@ const ContacUs = () => {
             variant="outlined"
             name="phone"
             value={inputPhone}
-            onChange={inputChange}
+            onChange={(event) => inputChange(event, setInputForm, inputForm)}
             className="inputPhone"
             type="number"
             InputProps={{
@@ -149,13 +137,13 @@ const ContacUs = () => {
           <SubText>Preferent contac method of comunication</SubText>
           <ContainChecks>
             <Radio
-              onChange={handleClick}
+              onChange={(event) => handleClick(event, setOptionCheck)}
               value={"email"}
               checked={optionCheck === "email"}
               label="Email"
             />
             <Radio
-              onChange={handleClick}
+              onChange={(event) => handleClick(event, setOptionCheck)}
               value={"phone"}
               checked={optionCheck === "phone"}
               label="Phone"
@@ -169,7 +157,7 @@ const ContacUs = () => {
             rows={5}
             name="multiline"
             value={inputMultiline}
-            onChange={inputChange}
+            onChange={(event) => inputChange(event, setInputForm, inputForm)}
           />
           <Button size="lg" variant="solid" color="primary" type="submit">
             Enviar
