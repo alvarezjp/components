@@ -87,7 +87,7 @@ const ContacUs = () => {
 
   return (
     <Container>
-      {(allFilled ) ? (
+      {/* {(allFilled ) ? (
         <Alert severity="success" style={{ position: "absolute", top: "50%" }}>
           <AlertTitle>Success</AlertTitle>
           This is a success Alert with an encouraging title.
@@ -97,7 +97,7 @@ const ContacUs = () => {
           <AlertTitle>Error</AlertTitle>
           This is an error Alert with a scary title.
         </Alert>
-      )}
+      )} */}
       <ContainForm>
         <Form onSubmit={clickSubmit}>
           <Title>Send us a Message</Title>
