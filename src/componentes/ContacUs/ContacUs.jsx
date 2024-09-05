@@ -8,6 +8,7 @@ import {
   SubText,
   Title,
 } from "./Styled.jsx";
+import useAlertTimer from "./useAlertTimer.js";
 import TextField from "@mui/material/TextField";
 import Radio from "@mui/joy/Radio";
 import Button from "@mui/joy/Button";
@@ -23,10 +24,10 @@ import Alert from "@mui/joy/Alert";
 import IconButton from "@mui/joy/IconButton";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import ReportIcon from '@mui/icons-material/Report';
+import ReportIcon from "@mui/icons-material/Report";
+import AlertMessage from "./AlertMessage.jsx";
 
 const ContacUs = () => {
-
   const [formAlert, setFormAlert] = useState("");
   const [countFalse, setCountFalse] = useState(0);
   const [errors, setErrors] = useState(previeErrors);
@@ -35,60 +36,16 @@ const ContacUs = () => {
   const { inputName, inputEmail, inputPhone, inputMultiline } = inputForm;
 
   useCountFalse(errors, setCountFalse);
+  useAlertTimer(setFormAlert,formAlert);
 
   return (
     <Container>
       <ContainForm>
-        {formAlert === "bien" && (
-          <Alert
-            // style={{ position: "absolute", top: "10px" }}
-            key={"Success"}
-            sx={{
-              alignItems: "flex-start",
-              width: "80%",
-              border: "2px solid black",
-              position: "absolute",
-              top: "10px",
-            }}
-            startDecorator={<CheckCircleIcon />}
-            variant="soft"
-            color={"success"}
-            endDecorator={
-              <IconButton variant="soft" color={"success"}>
-                <CloseRoundedIcon />
-              </IconButton>
-            }>
-            <div>
-              <div>Listo</div>
-              <p>Esto esta listo</p>
-            </div>
-          </Alert>
-        )}
-        {formAlert === "mal" && (
-          <Alert
-            key={"Error"}
-            sx={{
-              alignItems: "flex-start",
-              width: "80%",
-              border: "2px solid black",
-              position: "absolute",
-              top: "10px",
-            }}
-            startDecorator={<ReportIcon /> }
-            variant="soft"
-            color={"danger"}
-            endDecorator={
-              <IconButton variant="soft" color={"danger"}>
-                <CloseRoundedIcon />
-              </IconButton>
-            }>
-            <div>
-              <div>Mal</div>
-              <p>Faltan datos</p>
-            </div>
-          </Alert>
-        )}
-        <Form onSubmit={(event) => clickSubmit(event, inputForm, setErrors,setFormAlert)}>
+        <AlertMessage formAlert={formAlert} setFormAlert={setFormAlert} />
+        <Form
+          onSubmit={(event) =>
+            clickSubmit(event, inputForm, setErrors, setFormAlert)
+          }>
           <Title>Send us a Message</Title>
           <TextField
             id="outlined-basic"
